@@ -1,0 +1,229 @@
+---
+import Container from '../ui/Container.astro';
+import Button from '../ui/Button.astro';
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  buttonLabel?: string;
+  buttonHref?: string;
+}
+
+const {
+  title       = 'Votre projet mérite\nun partenaire à la hauteur.',
+  subtitle    = 'Parlons de votre vision. En 30 minutes, nous saurons si nous pouvons vous aider à atteindre quelque chose d\'exceptionnel.',
+  buttonLabel = 'Démarrer un projet',
+  buttonHref  = 'mailto:hello@studiopremium.studio',
+} = Astro.props;
+---
+
+<style>
+  .cta {
+    padding-block: clamp(6rem, 12vw, 11rem);
+    border-top: 1px solid var(--color-border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Large background glow */
+  .cta::before {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80vw;
+    height: 80vw;
+    background: radial-gradient(circle, rgba(232, 217, 192, 0.05) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  /* Decorative grid */
+  .cta-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--color-border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 100%, black 30%, transparent 100%);
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .cta-inner {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .cta-label {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 2rem;
+    padding: 0.375rem 0.875rem;
+    border: 1px solid rgba(232, 217, 192, 0.2);
+    border-radius: 999px;
+    background: rgba(232, 217, 192, 0.04);
+  }
+
+  .cta-title {
+    font-size: clamp(2.25rem, 5.5vw, 4.5rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 1.75rem;
+    color: var(--color-text);
+  }
+
+  .cta-subtitle {
+    font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+    color: var(--color-muted);
+    line-height: 1.65;
+    max-width: 50ch;
+    margin: 0 auto 3rem;
+  }
+
+  .cta-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .cta-note {
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    opacity: 0.65;
+  }
+
+  /* Footer bar */
+  .site-footer {
+    border-top: 1px solid var(--color-border);
+    padding-block: 2rem;
+  }
+
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-brand {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--color-text);
+  }
+
+  .footer-copy {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .footer-links a {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    transition: color var(--transition-base);
+  }
+
+  .footer-links a:hover {
+    color: var(--color-text);
+  }
+</style>
+
+<section class="cta" id="contact">
+  <div class="cta-grid" aria-hidden="true"></div>
+
+  <Container>
+    <div class="cta-inner">
+      <span class="cta-label gsap-fade-up" data-cta="label">Travaillons ensemble</span>
+      <h2 class="cta-title" data-cta="title">
+        {title.split('\n').map((line, i) => (
+          <span style={`display: block; ${i > 0 ? 'color: var(--color-accent)' : ''}`}>{line}</span>
+        ))}
+      </h2>
+      <p class="cta-subtitle gsap-fade-up" data-cta="subtitle">{subtitle}</p>
+      <div class="cta-actions gsap-fade-up" data-cta="actions">
+        <Button href={buttonHref} variant="primary" size="lg">
+          {buttonLabel}
+          <span aria-hidden="true">→</span>
+        </Button>
+        <Button href="#" variant="secondary" size="lg">
+          Voir nos services
+        </Button>
+      </div>
+      <p class="cta-note">Réponse garantie sous 24h · Pas d'engagement</p>
+    </div>
+  </Container>
+</section>
+
+<footer class="site-footer">
+  <Container>
+    <div class="footer-inner">
+      <span class="footer-brand">Studio Premium</span>
+      <nav class="footer-links" aria-label="Liens de pied de page">
+        <a href="/studio">Studio CMS</a>
+        <a href="#">Politique de confidentialité</a>
+        <a href="#">Mentions légales</a>
+      </nav>
+      <span class="footer-copy">© {new Date().getFullYear()} Studio Premium. Tous droits réservés.</span>
+    </div>
+  </Container>
+</footer>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const mm = gsap.matchMedia();
+
+  mm.add('(prefers-reduced-motion: no-preference)', () => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#contact',
+        start: 'top 75%',
+      },
+    });
+
+    tl.fromTo('[data-cta="label"]',
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
+    );
+
+    tl.fromTo('[data-cta="title"] span',
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power3.out' },
+      '-=0.2'
+    );
+
+    tl.fromTo('[data-cta="subtitle"]',
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },
+      '-=0.3'
+    );
+
+    tl.fromTo('[data-cta="actions"]',
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },
+      '-=0.3'
+    );
+  });
+</script>

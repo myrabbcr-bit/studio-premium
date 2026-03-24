@@ -1,0 +1,25 @@
+---
+/**
+ * /studio — Sanity Studio embarqué
+ * Rendu 100% côté client (client:only="react")
+ * Toute la navigation interne du Studio est gérée par son hash router
+ */
+import SanityStudio from '../../components/SanityStudio';
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio Premium — CMS</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <style>
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { height: 100dvh; overflow: hidden; background: #101112; }
+    </style>
+  </head>
+  <body>
+    <SanityStudio client:only="react" />
+  </body>
+</html>

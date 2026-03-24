@@ -1,0 +1,98 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  class?: string;
+  target?: string;
+  rel?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  class: className = '',
+  target,
+  rel,
+  ...rest
+} = Astro.props;
+
+const tag = href ? 'a' : 'button';
+
+const sizeMap = {
+  sm: 'px-5 py-2.5 text-sm',
+  md: 'px-7 py-3.5 text-sm',
+  lg: 'px-9 py-4.5 text-base',
+};
+
+const variantMap = {
+  primary: 'btn-primary',
+  secondary: 'btn-secondary',
+  ghost: 'btn-ghost',
+};
+---
+
+<style>
+  .btn-base {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-base);
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-text);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    backdrop-filter: blur(8px);
+  }
+
+  .btn-secondary:hover {
+    border-color: rgba(255, 255, 255, 0.25);
+    background-color: rgba(255, 255, 255, 0.05);
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    background-color: transparent;
+    color: var(--color-muted);
+  }
+
+  .btn-ghost:hover {
+    color: var(--color-text);
+  }
+</style>
+
+<tag
+  class={`btn-base ${variantMap[variant]} ${sizeMap[size]} ${className}`}
+  href={href}
+  target={target}
+  rel={rel || (target === '_blank' ? 'noopener noreferrer' : undefined)}
+  {...rest}
+>
+  <slot />
+</tag>

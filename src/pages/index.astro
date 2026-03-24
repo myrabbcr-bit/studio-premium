@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/sections/Hero.astro';
+import Services from '../components/sections/Services.astro';
+import Projects from '../components/sections/Projects.astro';
+import CTA from '../components/sections/CTA.astro';
+import { sanityFetch } from '../lib/sanity.ts';
+
+// ── Sanity query ─────────────────────────────────────────
+const query = /* groq */`
+  *[_type == "homePage"][0] {
+    seoTitle,
+    seoDescription,
+    heroBadge,
+    heroTitle,
+    heroSubtitle,
+    heroButtons[] { label, href, variant },
+    stats[]     { value, label },
+    services[]  { number, title, description, tags },
+    projects[]  { title, category, year, description, href },
+    ctaTitle,
+    ctaSubtitle,
+    ctaButtonLabel,
+    ctaButtonHref,
+  }
+`;
+
+interface HomePageData {
+  seoTitle?: string;
+  seoDescription?: string;
+  heroBadge?: string;
+  heroTitle?: string;
+  heroSubtitle?: string;
+  heroButtons?: { label: string; href: string; variant?: 'primary' | 'secondary' }[];
+  stats?: { value: string; label: string }[];
+  services?: { number: string; title: string; description: string; tags?: string[] }[];
+  projects?: { title: string; category: string; year: string; description: string; href?: string }[];
+  ctaTitle?: string;
+  ctaSubtitle?: string;
+  ctaButtonLabel?: string;
+  ctaButtonHref?: string;
+}
+
+// Fetch with graceful fallback — if no Sanity project configured, data = null
+const data: HomePageData | null = await sanityFetch<HomePageData>(query);
+---
+
+<BaseLayout
+  title={data?.seoTitle ?? 'Studio Premium — Agence Créative'}
+  description={data?.seoDescription ?? 'Studio créatif spécialisé en design de marque, développement web premium et stratégie digitale.'}
+>
+  <Hero
+    badge={data?.heroBadge}
+    title={data?.heroTitle}
+    subtitle={data?.heroSubtitle}
+    buttons={data?.heroButtons}
+    stats={data?.stats}
+  />
+
+  <Services services={data?.services} />
+
+  <Projects projects={data?.projects} />
+
+  <CTA
+    title={data?.ctaTitle}
+    subtitle={data?.ctaSubtitle}
+    buttonLabel={data?.ctaButtonLabel}
+    buttonHref={data?.ctaButtonHref}
+  />
+</BaseLayout>

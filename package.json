@@ -1,0 +1,32 @@
+{
+  "name": "studio-premium",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "sanity": "sanity"
+  },
+  "dependencies": {
+    "@astrojs/react": "^3.6.0",
+    "@sanity/astro": "^1.0.6",
+    "@sanity/client": "^6.22.0",
+    "@sanity/vision": "^3.62.0",
+    "astro": "^5.6.0",
+    "groq": "^3.7.0",
+    "gsap": "^3.12.5",
+    "lenis": "^1.1.14",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "sanity": "^3.62.0",
+    "styled-components": "^6.3.12"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.15",
+    "tailwindcss": "^4.0.15",
+    "typescript": "^5.6.3"
+  }
+}

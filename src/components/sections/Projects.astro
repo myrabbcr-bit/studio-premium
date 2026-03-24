@@ -1,0 +1,292 @@
+---
+import Container from '../ui/Container.astro';
+import Button from '../ui/Button.astro';
+
+interface Project {
+  title: string;
+  category: string;
+  year: string;
+  description: string;
+  href?: string;
+}
+
+interface Props {
+  projects?: Project[];
+}
+
+const { projects = [
+  {
+    title: 'Maison Vernier',
+    category: 'Brand Identity & Web',
+    year: '2024',
+    description: 'Refonte complète de l\'identité visuelle et du site digital pour une maison de haute joaillerie parisienne.',
+    href: '#',
+  },
+  {
+    title: 'Altius Finance',
+    category: 'Web App & Design System',
+    year: '2024',
+    description: 'Plateforme de gestion patrimoniale avec un design system complet et une expérience utilisateur repensée.',
+    href: '#',
+  },
+  {
+    title: 'Volta Studio',
+    category: 'Motion & Interactive',
+    year: '2023',
+    description: 'Site vitrine interactif avec des expériences WebGL immersives pour un studio d\'architecture contemporain.',
+    href: '#',
+  },
+  {
+    title: 'Nomad Magazine',
+    category: 'Editorial & Dev',
+    year: '2023',
+    description: 'Magazine digital avec un système éditorial sur mesure, optimisé pour la performance et le SEO.',
+    href: '#',
+  },
+] } = Astro.props;
+---
+
+<style>
+  .projects {
+    padding-block: clamp(5rem, 10vw, 9rem);
+    background-color: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .projects-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+    flex-wrap: wrap;
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    max-width: 18ch;
+  }
+
+  /* Projects table layout */
+  .projects-table {
+    width: 100%;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .project-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    padding: clamp(1.5rem, 3vw, 2rem) 0;
+    border-bottom: 1px solid var(--color-border);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    position: relative;
+  }
+
+  .project-row::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.01);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+  }
+
+  .project-row:hover::after {
+    opacity: 1;
+  }
+
+  .project-main {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .project-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .project-category {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .project-title {
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--color-text);
+    transition: color var(--transition-base);
+  }
+
+  .project-row:hover .project-title {
+    color: var(--color-accent);
+  }
+
+  .project-description {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    line-height: 1.6;
+    max-width: 55ch;
+    align-self: center;
+  }
+
+  .project-aside {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    align-self: center;
+    gap: 0.5rem;
+  }
+
+  .project-year {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .project-arrow {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    transition: all var(--transition-base);
+  }
+
+  .project-row:hover .project-arrow {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-bg);
+    transform: rotate(45deg);
+  }
+
+  .projects-footer {
+    margin-top: 3rem;
+    text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    .project-main {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .project-description {
+      display: none;
+    }
+  }
+</style>
+
+<section class="projects" id="projets">
+  <Container>
+    <div class="projects-header">
+      <div>
+        <span class="section-label">Travaux récents</span>
+        <h2 class="section-title">Projets sélectionnés.</h2>
+      </div>
+    </div>
+
+    <div class="projects-table" data-projects>
+      {projects.map((project) => (
+        <a
+          class="project-row"
+          href={project.href || '#'}
+          data-project
+          aria-label={`Voir le projet ${project.title}`}
+        >
+          <div class="project-main">
+            <div class="project-meta">
+              <span class="project-category">{project.category}</span>
+              <h3 class="project-title">{project.title}</h3>
+            </div>
+            <p class="project-description">{project.description}</p>
+          </div>
+          <div class="project-aside">
+            <span class="project-year">{project.year}</span>
+            <span class="project-arrow" aria-hidden="true">↗</span>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <div class="projects-footer">
+      <Button href="#" variant="secondary" size="md">
+        Voir tous les projets
+        <span aria-hidden="true">→</span>
+      </Button>
+    </div>
+  </Container>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const mm = gsap.matchMedia();
+
+  mm.add('(prefers-reduced-motion: no-preference)', () => {
+    gsap.fromTo(
+      '#projets .section-label, #projets .section-title',
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        stagger: 0.1,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '#projets',
+          start: 'top 80%',
+        },
+      }
+    );
+
+    const rows = document.querySelectorAll('[data-project]');
+    rows.forEach((row, i) => {
+      gsap.fromTo(
+        row,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: row,
+            start: 'top 88%',
+          },
+          delay: i * 0.05,
+        }
+      );
+    });
+  });
+</script>

@@ -1,0 +1,279 @@
+---
+import Container from '../ui/Container.astro';
+
+interface Service {
+  number: string;
+  title: string;
+  description: string;
+  tags?: string[];
+}
+
+interface Props {
+  services?: Service[];
+}
+
+const { services = [
+  {
+    number: '01',
+    title: 'Design & Identité',
+    description: 'Identités visuelles qui durent. Du logo au système de design complet, nous créons des marques qui résonnent avec votre audience.',
+    tags: ['Brand Identity', 'Logo Design', 'Design System', 'Art Direction'],
+  },
+  {
+    number: '02',
+    title: 'Développement Web',
+    description: 'Sites et applications performants, accessibles et maintenables. Construit sur les technologies du futur, livré aujourd\'hui.',
+    tags: ['Astro', 'Next.js', 'React', 'Tailwind CSS'],
+  },
+  {
+    number: '03',
+    title: 'Motion & Interaction',
+    description: 'Des animations qui donnent de la profondeur sans distraire. Chaque micro-interaction est pensée pour guider l\'utilisateur.',
+    tags: ['GSAP', 'Framer Motion', 'Three.js', 'WebGL'],
+  },
+  {
+    number: '04',
+    title: 'Stratégie Digitale',
+    description: 'Audit, conseil et accompagnement. Nous regardons votre présence digitale avec un œil critique et des solutions concrètes.',
+    tags: ['SEO Technique', 'Performance', 'Analytics', 'CRO'],
+  },
+] } = Astro.props;
+---
+
+<style>
+  .services {
+    padding-block: clamp(5rem, 10vw, 9rem);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .services-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+    flex-wrap: wrap;
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    max-width: 18ch;
+  }
+
+  .services-count {
+    font-size: 0.875rem;
+    color: var(--color-muted);
+    align-self: flex-end;
+    padding-bottom: 0.25rem;
+  }
+
+  /* Services grid */
+  .services-list {
+    display: grid;
+    gap: 0;
+  }
+
+  .service-card {
+    padding: clamp(1.75rem, 4vw, 2.5rem) 0;
+    border-top: 1px solid var(--color-border);
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 2rem;
+    align-items: start;
+    cursor: default;
+    transition: all var(--transition-base);
+    position: relative;
+  }
+
+  .service-card:last-child {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .service-card::after {
+    content: '';
+    position: absolute;
+    left: -1.5rem;
+    right: -1.5rem;
+    top: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.015);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    border-radius: var(--radius-md);
+    pointer-events: none;
+  }
+
+  .service-card:hover::after {
+    opacity: 1;
+  }
+
+  .service-number {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-muted);
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+    padding-top: 0.2rem;
+  }
+
+  .service-content {
+    flex: 1;
+  }
+
+  .service-title {
+    font-size: clamp(1.4rem, 2.5vw, 1.875rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.875rem;
+    transition: color var(--transition-base);
+  }
+
+  .service-card:hover .service-title {
+    color: var(--color-accent);
+  }
+
+  .service-description {
+    font-size: 0.95rem;
+    color: var(--color-muted);
+    line-height: 1.65;
+    max-width: 60ch;
+    margin-bottom: 1.25rem;
+  }
+
+  .service-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .service-tag {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.625rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    color: var(--color-muted);
+    transition: all var(--transition-base);
+  }
+
+  .service-card:hover .service-tag {
+    border-color: rgba(232, 217, 192, 0.25);
+    color: var(--color-accent);
+  }
+
+  .service-arrow {
+    font-size: 1.25rem;
+    color: var(--color-muted);
+    transition: all var(--transition-base);
+    padding-top: 0.25rem;
+    align-self: center;
+  }
+
+  .service-card:hover .service-arrow {
+    color: var(--color-accent);
+    transform: translate(4px, -4px);
+  }
+
+  @media (max-width: 640px) {
+    .service-card {
+      grid-template-columns: 50px 1fr;
+    }
+
+    .service-arrow {
+      display: none;
+    }
+  }
+</style>
+
+<section class="services" id="services">
+  <Container>
+    <div class="services-header">
+      <div>
+        <span class="section-label">Nos expertises</span>
+        <h2 class="section-title">Ce que nous<br />faisons le mieux.</h2>
+      </div>
+      <span class="services-count">{services.length.toString().padStart(2, '0')} services</span>
+    </div>
+
+    <div class="services-list" data-services>
+      {services.map((service) => (
+        <div class="service-card" data-service>
+          <span class="service-number">{service.number}</span>
+          <div class="service-content">
+            <h3 class="service-title">{service.title}</h3>
+            <p class="service-description">{service.description}</p>
+            {service.tags && service.tags.length > 0 && (
+              <div class="service-tags">
+                {service.tags.map((tag) => (
+                  <span class="service-tag">{tag}</span>
+                ))}
+              </div>
+            )}
+          </div>
+          <span class="service-arrow" aria-hidden="true">↗</span>
+        </div>
+      ))}
+    </div>
+  </Container>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const mm = gsap.matchMedia();
+
+  mm.add('(prefers-reduced-motion: no-preference)', () => {
+    // Section title reveal
+    gsap.fromTo(
+      '#services .section-label, #services .section-title, #services .services-count',
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        stagger: 0.1,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '#services',
+          start: 'top 80%',
+        },
+      }
+    );
+
+    // Cards stagger
+    const cards = document.querySelectorAll('[data-service]');
+    gsap.fromTo(
+      cards,
+      { opacity: 0, x: -30 },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '[data-services]',
+          start: 'top 75%',
+        },
+      }
+    );
+  });
+</script>

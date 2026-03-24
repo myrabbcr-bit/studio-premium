@@ -1,0 +1,23 @@
+---
+interface Props {
+  class?: string;
+  as?: string;
+}
+
+const { class: className = '', as: Tag = 'div' } = Astro.props;
+---
+
+<style>
+  .container {
+    width: 100%;
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: clamp(1.25rem, 5vw, 2.5rem);
+    padding-right: clamp(1.25rem, 5vw, 2.5rem);
+  }
+</style>
+
+<Tag class={`container ${className}`}>
+  <slot />
+</Tag>
